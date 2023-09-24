@@ -31,13 +31,12 @@ User = get_user_model()
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model = driver  # Replace 'driver' with your actual model name
-        fields = ['citizenship_no', 'first_name', 'last_name', 'email', 'password', 'address']
+        fields = '__all__'
 
 class CitizenSerializer(serializers.ModelSerializer):
     class Meta:
         model = citizen  # Replace 'citizen' with your actual model name
-        fields = ['citizenship_no', 'first_name', 'last_name', 'email', 'password', 'address']
-
+        fields = '__all__'
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(
         style={'input_type': 'password'},
