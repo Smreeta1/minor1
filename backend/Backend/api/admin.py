@@ -2,8 +2,8 @@ from django.contrib import admin
 from .models import citizen, driver
 
 class CitizenDriverAdmin(admin.ModelAdmin):
-    list_display = ("name", "address", "email", "citizenship_no")
-    search_fields = ("name", "email", "citizenship_no")
+    list_display = ("first_name","last_name", "address", "email", "citizenship_no")
+    search_fields = ("first_name","last_name", "email", "citizenship_no")
     list_filter = ("address",)
     
     def get_queryset(self, request):
