@@ -16,7 +16,7 @@ class UserRegisterationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'name', 'address', 'password', 'password2']
+        fields = ['email',"name",'citizenship_no', 'address', 'password', 'password2']
         extra_kwargs = {
             'password': {'write_only': True}
         }

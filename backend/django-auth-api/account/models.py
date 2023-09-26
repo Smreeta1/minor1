@@ -1,9 +1,11 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxLengthValidator
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser,PermissionsMixin
 
 # Custom User Manager 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name,address, password=None, password2=None):
+    def create_user(self, email, name,address,citizenship_no, password=None, password2=None):
         """
         Creates and saves a User with the given email, name, tc and password.
         """
@@ -14,13 +16,14 @@ class UserManager(BaseUserManager):
             email=self.normalize_email(email),
             name=name,
             address=address,
+            citizenship_no=citizenship_no,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, name, address, password=None):
+    def create_superuser(self, email, name, address,citizenship_no, password=None):
         """
         Creates and saves a superuser with the given email, tc, name and password.
         """
@@ -28,7 +31,9 @@ class UserManager(BaseUserManager):
             email,
             password=password,
             name=name,
+            # last_name=last_name,
             address=address,
+            citizenship_no=citizenship_no,
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -43,7 +48,17 @@ class User(AbstractBaseUser,PermissionsMixin):
         unique=True,
     )
     name = models.CharField(max_length=200)
-    tc=models.BooleanField()
+    
+    
+    # citizenship_no = models.CharField(
+    #     max_length=20,
+    #     validators=[MaxLengthValidator(limit_value=20)]
+    # )
+    
+    citizenship_no = models.CharField(max_length=10, default="")
+
+    address = models.CharField(max_length=200,default="")
+    # tc=models.BooleanField()
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -52,7 +67,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name", "address"]
+    REQUIRED_FIELDS = ["name", "address","citizenship_no"]
 
     def __str__(self):
         return self.email
