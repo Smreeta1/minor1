@@ -28,6 +28,12 @@ SECRET_KEY = 'django-insecure-=(piv$!fp(eh=1c-f=b9!n#%1kn!eqoj*7f=)ismw*whk&$0+y
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
 
 
 # Application definition
@@ -43,6 +49,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+   
+
 ]
 
 MIDDLEWARE = [
@@ -144,6 +152,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'account.User'
 
+# Example CSP header in Django (settings.py)
+CSP_FONT_SRC = ("'self'", "http://127.0.0.1:8000")
+
 #Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.office365.com'
@@ -187,8 +198,49 @@ PASSWORD_RESET_TIMEOUT=900 #900 sec =15 Min
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://192.168.1.67:3000"
+
 ]
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
+SESSION_COOKIE_SAMESITE = 'None'
+CORS_ALLOW_CREDENTIALS = True
+
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',  # Add the OPTIONS method
+]
+
+# Configure ASGI_APPLICATION
+ASGI_APPLICATION = 'djangoauthapi.routing.application'
+
+from corsheaders.defaults import default_headers
+CHANNELS_WS_PROTOCOLS = ["http", "https"]  # Add the protocols for WebSocket connections
+CORS_ALLOW_ALL_ORIGINS = True  # Allow WebSocket connections from all origins
+CORS_ALLOW_HEADERS = list(default_headers)  # Allow default headers
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+     'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
